@@ -30,7 +30,7 @@ residualServer <- function(id, data, regressionResult){
                   updateSelectInput(session, "num.var", choices = numeric_vars)
             })
             
-            # Generate complementary information dynamically
+            # Generate residual analysis result dynamically
             output$res.result <- renderUI({
                   selected_info <- input$res.display  # Get user-selected options
                   info_list <- list()
@@ -73,7 +73,7 @@ residualServer <- function(id, data, regressionResult){
               do.call(tagList, info_list)
             })
             
-            # Reactive outputs for complementary information
+            # Reactive outputs for residual analysis result
             output$mean <- renderPrint({
                   req(regressionResult())
                   summary <- summary(regressionResult())

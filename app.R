@@ -15,6 +15,7 @@ source("modules/fileUpload.R")
 source("modules/correlation.R")
 source("modules/linearRegression.R")
 source("modules/residualAnalysis.R")
+source("modules/atypicalPoint.R")
 
 
 # Define ui function
@@ -32,6 +33,9 @@ ui <- fluidPage(theme = shinytheme("flatly"),
                     ),
                     tabPanel("Residual analysis",
                              residualUI("res")
+                    ),
+                    tabPanel("Atypical and influential points detection",
+                             atypicalPointUI("detection")
                     )
                 ) # navbarPage
         ) # fluidPage
@@ -52,9 +56,10 @@ server <- function(input, output, session) {
           
 # server for RESIDUAL ANALYSIS
           residualServer("res", data = uploaded.data, regressionResult = regressionModel)
+          
+# server for DETECTION OF ATYPICAL AND INFLUENTIAL POINTS
+          atypicalPointServer("detection", data = uploaded.data, regressionResult = regressionModel)
 }
-
-
 
 
 # Create shiny object
