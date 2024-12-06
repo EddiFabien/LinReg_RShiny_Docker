@@ -20,7 +20,7 @@ residualUI <- function(id){
       )
 }
 
-residualServer <- function(id, data, regressionResult){
+residualServer <- function(id, data, model){
       moduleServer(id, function(input, output, session){
             ns <- session$ns
             # Update variable selection inputs for residual analysis
@@ -75,13 +75,13 @@ residualServer <- function(id, data, regressionResult){
             
             # Reactive outputs for residual analysis result
             output$mean <- renderPrint({
-                  req(regressionResult())
-                  summary <- summary(regressionResult())
+                  req(model())
+                  summary <- summary(model())
                   mean(summary$residuals)
             })
             output$graph <- renderPlot({
-                  req(data(), regressionResult(), input$num.var)
-                  summary <- summary(regressionResult())
+                  req(data(), model(), input$num.var)
+                  summary <- summary(model())
                   ggplot(data(), aes_string(x = input$num.var, y = summary$residuals)) +
                         geom_point(color = "blue") +
                         geom_hline(yintercept = 0, linetype = "solid", color = "red") +
@@ -93,13 +93,13 @@ residualServer <- function(id, data, regressionResult){
                         theme_minimal()
             })
             output$henryline <- renderPlot({
-                  req(regressionResult())
-                  summary <- summary(regressionResult())
+                  req(model())
+                  summary <- summary(model())
                   qqnorm(summary$residuals, col = "green", pch = 19)
             })
             output$jbtest <- renderText({
-                  req(regressionResult())
-                  summary <- summary(regressionResult())
+                  req(model())
+                  summary <- summary(model())
                   residus <-summary$residuals
                   # Asymmetry
                   g1 <- mean(residus^3)/(mean(residus^2)^1.5)
@@ -112,9 +112,9 @@ residualServer <- function(id, data, regressionResult){
 
                   # Decision based on p-value
                   if (p_value[2] < 0.05) {
-                        result <- "Result: H0 rejected (Significant)"
+                        result <- "Result: H0 rejected"
                   } else if( 0.05 < p_value[2]) {
-                        result <- "Result: H0 not rejected (Not significant)"
+                        result <- "Result: H0 not rejected"
                   }
                   else {
                         result <- "Error: p_value is not valid."

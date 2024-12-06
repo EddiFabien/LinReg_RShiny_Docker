@@ -8,6 +8,7 @@ library(DT)      # For interactive tables
 library(dplyr)
 library(ggplot2)
 library(stats)
+library(MASS)
 
 
 # Module import
@@ -16,6 +17,7 @@ source("modules/correlation.R")
 source("modules/linearRegression.R")
 source("modules/residualAnalysis.R")
 source("modules/atypicalPoint.R")
+source("modules/featureSelection.R")
 
 
 # Define ui function
@@ -36,6 +38,9 @@ ui <- fluidPage(theme = shinytheme("flatly"),
                     ),
                     tabPanel("Atypical and influential points detection",
                              atypicalPointUI("detection")
+                    ),
+                    tabPanel("Feature selection",
+                               featureSelectionUI("selection")
                     )
                 ) # navbarPage
         ) # fluidPage
@@ -55,10 +60,14 @@ server <- function(input, output, session) {
           
           
 # server for RESIDUAL ANALYSIS
-          residualServer("res", data = uploaded.data, regressionResult = regressionModel)
+          residualServer("res", data = uploaded.data, model = regressionModel)
           
 # server for DETECTION OF ATYPICAL AND INFLUENTIAL POINTS
-          atypicalPointServer("detection", data = uploaded.data, regressionResult = regressionModel)
+          atypicalPointServer("detection", data = uploaded.data, model = regressionModel)
+
+# server for DETECTION OF ATYPICAL AND INFLUENTIAL POINTS
+          featureSelectionServer("selection", data = uploaded.data, model = regressionModel)
+          
 }
 
 

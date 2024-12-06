@@ -71,12 +71,12 @@ fileUploadServer <- function(id) {
                   
                   tryCatch({
                         if (input$fileType == "csv") {
-                              df <- read.csv(input$file$datapath, header = input$header, sep = input$sep2, stringsAsFactors = FALSE)
+                              df <- read.csv(input$file$datapath, header = input$header, sep = input$sep2, stringsAsFactors = TRUE)
                         } else if (input$fileType == "txt") {
-                              df <- read.table(input$file$datapath, header = input$header, sep = input$sep1, stringsAsFactors = FALSE)
+                              df <- read.table(input$file$datapath, header = input$header, sep = input$sep1, stringsAsFactors = TRUE)
                         } else if (input$fileType == "excel") {
                               validate(need(input$sheet > 0, "Sheet number must be greater than 0."))
-                              df <- readxl::read_xlsx(input$file$datapath, sheet = as.numeric(input$sheet))
+                              df <- readxl::read_xlsx(input$file$datapath, sheet = as.numeric(input$sheet), stringsAsFactors = TRUE)
                         } else {
                               NULL}
                   }, 

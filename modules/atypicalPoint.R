@@ -51,7 +51,7 @@ atypicalPointUI <- function(id){
 
 
 
-atypicalPointServer <- function(id, data, regressionResult){
+atypicalPointServer <- function(id, data, model){
   moduleServer(id, function(input, output, session){
         ns <- session$ns
         
@@ -101,8 +101,8 @@ atypicalPointServer <- function(id, data, regressionResult){
         
         # Reactive outputs for residual analysis result
         output$stud.value <- renderPrint({
-          req(data(), regressionResult())
-          summary <- summary(regressionResult())
+          req(data(), model())
+          summary <- summary(model())
           # p = number of the explicative  variables
           p <- length(rownames(summary$coefficients))-1
           studThreshold <- function(alpha, n , p){
@@ -114,12 +114,12 @@ atypicalPointServer <- function(id, data, regressionResult){
           stud.threshold
         })
         output$stud.table <- renderDT({
-          req(regressionResult(), data())
-          summary <- summary(regressionResult())
+          req(model(), data())
+          summary <- summary(model())
           # p = number of the explicative  variables
           p <- length(rownames(summary$coefficients))-1
           # Studentized residual of the regression
-          studentized.res <- rstudent(regressionResult())
+          studentized.res <- rstudent(model())
           # Critical threshold for the studentized residual with risk alpha
           studThreshold <- function(alpha, n , p){
             threshold = qt(1-alpha/2, n-p-2)
@@ -132,8 +132,8 @@ atypicalPointServer <- function(id, data, regressionResult){
           atypical.influential.points
         })
         output$stud.visualized <- renderPlot({
-          req(data(), regressionResult(), input$numericalVar)
-          summary <- summary(regressionResult())
+          req(data(), model(), input$numericalVar)
+          summary <- summary(model())
           # p = number of the explicative  variables
           p <- length(rownames(summary$coefficients))-1
           # Critical threshold for the studentized residual with risk alpha
@@ -143,7 +143,7 @@ atypicalPointServer <- function(id, data, regressionResult){
           }
           # Threshold with 10% of risk
           stud.threshold <- studThreshold(0.1, nrow(data()), p)
-          summary <- summary(regressionResult())
+          summary <- summary(model())
           ggplot(data(), aes_string(x = input$numericalVar, y = summary$residuals)) +
             geom_point(color = "blue") +
             geom_hline(yintercept = 0, linetype = "solid", color = "black") +
@@ -184,8 +184,8 @@ atypicalPointServer <- function(id, data, regressionResult){
         
         # Reactive outputs for the atypical and the influential points in sense of the lever
         output$lever.value <- renderPrint({
-          req(data(), regressionResult())
-          summary <- summary(regressionResult())
+          req(data(), model())
+          summary <- summary(model())
           # p = number of the explicative  variables
           p <- length(rownames(summary$coefficients))-1
           # Threshold of lever
@@ -193,10 +193,10 @@ atypicalPointServer <- function(id, data, regressionResult){
           lever.threshold
         })
         output$lever.list <- renderDT({
-          req(regressionResult(), data())
-          model <- regressionResult()
-          req(data(), regressionResult())
-          summary <- summary(regressionResult())
+          req(model(), data())
+          model <- model()
+          req(data(), model())
+          summary <- summary(model())
           # p = number of the explicative  variables
           p <- length(rownames(summary$coefficients))-1
           # lever
