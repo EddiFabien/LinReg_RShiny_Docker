@@ -16,4 +16,4 @@ This application is able to :
 -   language : R
 -   packages : R Shiny and shinytest2
 
- ![Caption for the image](/Desktop/Personnal_project/LinReg_RShiny_Docker/tests/testthat/_snaps/linux-4.4/shinytest2/my-app-001_.png)
+ ![app look](tests/testthat/_snaps/linux-4.4/shinytest2/my-app-001_.png)
