@@ -1,6 +1,6 @@
 ## Linear Regression Analysis - Web application modularized using R/R Shiny and Docker
 
-This application is able to :
+This application is capable to :
 
 -   upload the excel or cvs/txt file.
 -   analyze of the correlation (Pearson) between two numerical variables.
