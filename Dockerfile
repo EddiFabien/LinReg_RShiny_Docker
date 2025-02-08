@@ -11,7 +11,7 @@ RUN R -e "install.packages(c('shiny', 'bslib', 'shinythemes', 'readxl', 'DT', 'd
 COPY app.R /home/shiny-app/app.R
 
 # Expose the application port
-EXPOSE 8180
+EXPOSE 1032
 
 # Run the R Shiny app
-CMD Rscript /home/shiny-app/app.R
+CMD ["Rscript","/home/shiny-app/app.R"]
